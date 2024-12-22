@@ -1,0 +1,27 @@
+[package]
+name = "auth-service"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "auth_service_server"
+path = "src/bin/main.rs"
+
+[lib]
+name = "auth_service"
+path = "src/lib/lib.rs"
+
+[dependencies]
+anyhow = "1.0.94"
+axum = "0.7.9"
+clap = { version = "4.5.23", features = ["env", "derive"] }
+dotenv = "0.15.0"
+jsonwebtoken = "9.3.0"
+reqwest = { version = "0.12.9", features = ["json"] }
+serde = { version = "1.0.216", features = ["derive"] }
+serde_json = "1.0.133"
+thiserror = "2.0.9"
+tokio = { version = "1.42.0", features = ["full"] }
+tower-http = { version = "0.6.2", features = ["cors", "trace"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
