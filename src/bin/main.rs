@@ -12,7 +12,7 @@ async fn main() -> anyhow::Result<()> {
     let env = Arc::new(Env::parse());
 
     let authentication_service = Arc::new(AuthenticationServiceFirebase::new(
-        env.firebase_api_key.clone()
+        env.firebase_api_key.clone(),
     ));
 
     let server_config = HttpServerConfig::new(env.port.clone());
@@ -20,7 +20,6 @@ async fn main() -> anyhow::Result<()> {
     let http_server = HttpServer::new(server_config, Arc::clone(&authentication_service)).await?;
 
     http_server.run().await?;
-
 
     Ok(())
 }

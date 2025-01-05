@@ -6,5 +6,5 @@ pub struct Env {
     pub port: String,
 
     #[clap(env)]
-    pub firebase_api_key: String
+    pub firebase_api_key: String,
 }

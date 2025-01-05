@@ -20,6 +20,7 @@ pub struct AuthLoginResponse {
 pub struct AuthVerifyTokenResponse {
     pub email: String,
     pub display_name: String,
+    pub id: String,
 }
 
 impl AuthLoginResponse {
@@ -33,10 +34,11 @@ impl AuthLoginResponse {
 }
 
 impl AuthVerifyTokenResponse {
-    pub fn new(email: String, display_name: String) -> Self {
+    pub fn new(email: String, display_name: String, id: String) -> Self {
         Self {
             email,
             display_name,
+            id,
         }
     }
 }

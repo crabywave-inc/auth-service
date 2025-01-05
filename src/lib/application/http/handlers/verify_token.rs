@@ -13,6 +13,7 @@ pub struct VerifyTokenRequest {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize)]
 pub struct VerifyTokenResponse {
     email: String,
+    id: String,
 }
 
 pub async fn verify_token<A: AuthenticationService>(
@@ -23,5 +24,13 @@ pub async fn verify_token<A: AuthenticationService>(
         .verify_token(&payload.token)
         .await
         .map_err(|e| ApiError::InternalServerError(e.to_string()))
-        .map(|e| ApiSuccess::new(StatusCode::OK, VerifyTokenResponse { email: e.email }))
+        .map(|e| {
+            ApiSuccess::new(
+                StatusCode::OK,
+                VerifyTokenResponse {
+                    email: e.email,
+                    id: e.id,
+                },
+            )
+        })
 }

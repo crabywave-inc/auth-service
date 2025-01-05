@@ -116,8 +116,11 @@ impl AuthenticationService for AuthenticationServiceFirebase {
             .await
             .map_err(|_| AuthenticationError::InternalServerError)?;
 
-        let auth_verify_token_response =
-            AuthVerifyTokenResponse::new(body.users[0].email.clone(), body.users[0].email.clone());
+        let auth_verify_token_response = AuthVerifyTokenResponse::new(
+            body.users[0].email.clone(),
+            body.users[0].email.clone(),
+            body.users[0].local_id.clone(),
+        );
 
         Ok(auth_verify_token_response)
     }
