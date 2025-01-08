@@ -5,8 +5,9 @@ use crate::application::http::handlers::login::login;
 use crate::application::http::handlers::verify_token::verify_token;
 use crate::domain::auth::ports::AuthenticationService;
 use anyhow::Context;
-use axum::routing::post;
+use axum::routing::{get, post};
 use axum::{Extension, Router};
+use handlers::health::{live, ready};
 use std::sync::Arc;
 use tokio::net;
 use tracing::{info, info_span};
@@ -85,6 +86,8 @@ where
     A: AuthenticationService,
 {
     axum::Router::new()
+        .route("/health/live", get(live))
+        .route("/health/ready", get(ready))
         .route("/auth/login", post(login::<A>))
         .route("/auth/verify", post(verify_token::<A>))
 }

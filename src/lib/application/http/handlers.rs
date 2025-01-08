@@ -1,5 +1,6 @@
 pub mod login;
 pub mod verify_token;
+pub mod health;
 
 use crate::application::http::responses::ApiResponseError;
 use axum::{http::StatusCode, response::IntoResponse, Json};
