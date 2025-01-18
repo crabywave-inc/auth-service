@@ -4,6 +4,7 @@ use crate::domain::auth::entities::{
 use crate::domain::auth::ports::AuthenticationService;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use tracing::info;
 
 #[derive(Debug, Clone)]
 pub struct AuthenticationServiceFirebase {
@@ -80,12 +81,19 @@ impl AuthenticationService for AuthenticationServiceFirebase {
             }))
             .send()
             .await
-            .map_err(|_| AuthenticationError::InternalServerError)?;
+            .map_err(|e| {
+                tracing::error!("Error login_user(): {:?}", e);
+                AuthenticationError::InternalServerError(e.to_string())
+            })?;
+
+        if !response.status().is_success() {
+            return Err(AuthenticationError::InvalidCredentials);
+        }
 
         let t = response
             .json::<FirebaseLoginResponse>()
             .await
-            .map_err(|_| AuthenticationError::InternalServerError)?;
+            .map_err(|e| AuthenticationError::InternalServerError(e.to_string()))?;
 
         let auth_login_response = AuthLoginResponse::new(t.display_name, t.email, t.id_token);
 
@@ -109,12 +117,13 @@ impl AuthenticationService for AuthenticationServiceFirebase {
             }))
             .send()
             .await
-            .map_err(|_| AuthenticationError::InternalServerError)?;
+            .map_err(|e| AuthenticationError::InternalServerError(e.to_string()))?;
 
+        info!("RESPONSE: {:?}", response);
         let body = response
             .json::<FirebaseVerifyTokenResponse>()
             .await
-            .map_err(|_| AuthenticationError::InternalServerError)?;
+            .map_err(|e| AuthenticationError::InternalServerError(e.to_string()))?;
 
         let auth_verify_token_response = AuthVerifyTokenResponse::new(
             body.users[0].email.clone(),

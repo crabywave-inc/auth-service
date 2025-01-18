@@ -1,6 +1,6 @@
+pub mod health;
 pub mod login;
 pub mod verify_token;
-pub mod health;
 
 use crate::application::http::responses::ApiResponseError;
 use axum::{http::StatusCode, response::IntoResponse, Json};
@@ -34,6 +34,7 @@ pub enum ApiError {
     InternalServerError(String),
     UnProcessableEntity(String),
     NotFound(String),
+    InvalidCredentials(String),
 }
 
 impl From<anyhow::Error> for ApiError {
@@ -95,6 +96,15 @@ impl IntoResponse for ApiError {
                 Json(ApiResponseError {
                     code: "E_NOT_FOUND".to_string(),
                     status: 404,
+                    message,
+                }),
+            )
+                .into_response(),
+            ApiError::InvalidCredentials(message) => (
+                StatusCode::UNAUTHORIZED,
+                Json(ApiResponseError {
+                    code: "E_INVALID_CREDENTIALS".to_string(),
+                    status: 401,
                     message,
                 }),
             )

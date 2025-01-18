@@ -11,9 +11,9 @@ fn init_logger(env: Arc<Env>) {
         }
         AppEnv::Production => {
             tracing_subscriber::fmt()
-            .json()
-            .with_max_level(tracing::Level::INFO)
-            .init();
+                .json()
+                .with_max_level(tracing::Level::INFO)
+                .init();
         }
     }
 }
@@ -25,8 +25,6 @@ async fn main() -> anyhow::Result<()> {
 
     //tracing_subscriber::fmt::init();
     init_logger(Arc::clone(&env));
-
-
 
     let authentication_service = Arc::new(AuthenticationServiceFirebase::new(
         env.firebase_api_key.clone(),

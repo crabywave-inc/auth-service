@@ -36,12 +36,10 @@ impl From<AuthenticationError> for ApiError {
     fn from(e: AuthenticationError) -> Self {
         match e {
             AuthenticationError::UserNotFound => ApiError::NotFound("User not found".to_string()),
-            AuthenticationError::InvalidPassword => {
-                ApiError::UnProcessableEntity("Invalid password".to_string())
+            AuthenticationError::InvalidCredentials => {
+                ApiError::InvalidCredentials("Invalid Credentials".to_string())
             }
-            AuthenticationError::InternalServerError => {
-                ApiError::InternalServerError("Internal server error".to_string())
-            }
+            AuthenticationError::InternalServerError(e) => ApiError::InternalServerError(e),
         }
     }
 }

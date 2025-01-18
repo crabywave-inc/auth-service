@@ -4,10 +4,10 @@ use thiserror::Error;
 pub enum AuthenticationError {
     #[error("User not found")]
     UserNotFound,
-    #[error("Invalid password")]
-    InvalidPassword,
-    #[error("Internal server error")]
-    InternalServerError,
+    #[error("Invalid credentials")]
+    InvalidCredentials,
+    #[error("Internal server error {0}")]
+    InternalServerError(String),
 }
 
 #[derive(Debug)]
